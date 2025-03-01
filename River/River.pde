@@ -6,6 +6,10 @@ float riverWidth = 300;
 float riverX;
 boolean movingLeft = false, movingRight = false;
 
+// Currency 
+int money = 100;
+
+
 void settings() {
   fullScreen(); // Set the game to full-screen mode
 }
@@ -27,4 +31,6 @@ void draw() {
   boatX += (boatTargetX - boatX) * boatSpeed;
   
   drawBoat();
+
+
 }
