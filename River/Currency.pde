@@ -1,3 +1,16 @@
+class Button{
+  PVector pos;
+  PVector size;
+  PFont buttonFont;
+  color buttonColor, fontColor;
+  
+  //hitboxes for button
+  float left, right, bot, top;
+  
+  Button(float x, float y, String type){
+    
+  }
+}
 void mousePressed(){
   noStroke();
   fill(#000000);
