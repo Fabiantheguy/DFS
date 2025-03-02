@@ -8,7 +8,15 @@ class Button{
   float left, right, bot, top;
   
   Button(float x, float y, String type){
+ 
+    size = new PVector(320.0, 140.0);
+    //buttonFont
     
+    //switch(case){
+    //  case "range":
+    //    pos = new PVector(1500.0, 100.0);
+        
+        
   }
 }
 // Currency
@@ -18,7 +26,7 @@ void currencyMousePressed(){
   fill(#000000);
   rect(100, 100, 320, 140);
   rect(1500, 100, 320, 140);
-  rect(100, 400, 320, 140);
+  //rect(100, 400, 320, 140);
   rect(1500, 400, 320, 140);
   fill(#FFFFFF);
   textSize(30);

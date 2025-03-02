@@ -11,10 +11,11 @@ void setup() {
 void draw() {
   riverDraw();
   boatDraw();
+  currencyMousePressed();
 }
 
 void mousePressed() {
-  currencyMousePressed();
+  //currencyMousePressed();
 }
 
 void mouseReleased() {
