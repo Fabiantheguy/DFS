@@ -1,36 +1,14 @@
-float boatX;
-float boatY;
-float boatSpeed = 0.1; // Small value for smooth movement
-float boatTargetX; // Target position for the boat
-float riverWidth = 300;
-float riverX;
-boolean movingLeft = false, movingRight = false;
-
-// Currency 
-int money = 100;
+float riverX = 100, riverWidth = 400;
 
 
-void settings() {
-  fullScreen(); // Set the game to full-screen mode
-}
 
-void setup() {
-  boatX = width / 2;
-  boatY = height - 100;
-  boatTargetX = boatX; // Set initial target to starting position
+
+void riverSetup() {
   riverX = width / 2 - riverWidth / 2;
 }
 
-void draw() {
+void riverDraw() {
+  background(100, 150, 255);
   background(50, 150, 255);
-  move();
   drawRiver();
-  
-
-  // Smooth boat movement towards target
-  boatX += (boatTargetX - boatX) * boatSpeed;
-  
-  drawBoat();
-
-
 }

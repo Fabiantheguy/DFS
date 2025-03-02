@@ -1,4 +1,6 @@
-void mousePressed(){
+// Currency
+int money = 100;
+void currencyMousePressed(){
   noStroke();
   fill(#000000);
   rect(100, 100, 320, 140);
