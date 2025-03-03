@@ -7,14 +7,27 @@ class Button{
   //hitboxes for button
   float left, right, bot, top;
   
-  Button(float x, float y, String type){
+  Button(String type){
  
     size = new PVector(320.0, 140.0);
-    //buttonFont
+    buttonFont = loadFont("Verdana-30.vlw");
+    buttonColor = #000000;
+    fontColor = #FFFFFF;
     
     //switch(case){
     //  case "range":
     //    pos = new PVector(1500.0, 100.0);
+    //    text("Net Range", 1660, 150);
+    //    text("Cost: " + 5, 1660, 200);        
+    //    break;
+    //  case "speed"
+    //    pos = new PVector(100.0, 100.0);
+    //    text("Boat Speed", 255, 150);
+    //    text("Cost: " + 5, 255, 200);
+    //    break;
+    
+        
+        
         
         
   }
