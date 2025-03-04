@@ -1,3 +1,5 @@
+Button b;
+
 void settings() {
   fullScreen(); // Set the game to full-screen mode
 }
@@ -6,12 +8,13 @@ void settings() {
 void setup() {
   riverSetup();
   boatSetup();
+  b = Button("type");
 }
 
 void draw() {
   riverDraw();
   boatDraw();
-  currencyMousePressed();
+  b.currencyMousePressed();
 }
 
 void mousePressed() {
