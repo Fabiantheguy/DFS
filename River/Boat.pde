@@ -4,7 +4,8 @@ float netX, netY, netStartX, netStartY;
 float boatX = 300, boatY = 400;
 float boatTargetX = boatX;
 boolean movingLeft = false, movingRight = false;
-float boatSpeed = 0.1; // Small value for smooth movement
+int netMax = 4; // Amount of cans that fit in the net
+float boatSpeed = .8; // Boat's movement speed
 
 // Net movement variables
 float netDirX, netDirY;
@@ -78,33 +79,60 @@ void boatDraw() {
   }
 }
 
-
-void keyPressed() { 
-  if (key == 'a' || key == 'A') {
-    movingLeft = true;
-  }
-
-  if (key == 'd' || key == 'D') {
-    movingRight = true;
-  }
+class MoveLeftCommand implements Command {
+    public void execute() {
+        movingLeft = true;
+    }
 }
 
-void keyReleased() {
-  if (key == 'a' || key == 'A') {
-    movingLeft = false;
-  }
+class MoveRightCommand implements Command {
+    public void execute() {
+        movingRight = true;
+    }
+}
 
-  if (key == 'd' || key == 'D') {
-    movingRight = false;
-  }
+class StopMoveLeftCommand implements Command {
+    public void execute() {
+        movingLeft = false;
+    }
+}
+
+class StopMoveRightCommand implements Command {
+    public void execute() {
+        movingRight = false;
+    }
+}
+
+class ThrowNetCommand implements Command {
+    public void execute() {
+        if (!netThrown) {
+            netThrown = true;
+            netX = boatX;
+            netY = boatY;
+            netStartX = boatX;
+            netStartY = boatY;
+            netDistance = 0;
+            netSize = 50;
+
+            float dirX = mouseX - boatX;
+            float dirY = mouseY - boatY;
+            float length = sqrt(dirX * dirX + dirY * dirY);
+            targetDistance = min(length, maxRange);
+            netDirX = dirX / length;
+            netDirY = dirY / length;
+        }
+        if (netThrown && netLanded) {
+            isRetracting = true;
+        }
+    }
 }
 
 void move() {
   if (movingLeft) {
-    boatTargetX -= 5; 
+    boatTargetX -= boatSpeed; 
   }
   if (movingRight) {
-    boatTargetX += 5;
+    boatTargetX += boatSpeed;
   }
   boatTargetX = constrain(boatTargetX, riverX + 25, riverX + riverWidth - 25);
 }
@@ -125,34 +153,33 @@ void drawBoat() {
   endShape(CLOSE);
 }
 
-void boatMouseReleased() {
-  if (mouseButton == LEFT) {
-    if (!netThrown) {
-      netThrown = true;
-      netX = boatX;
-      netY = boatY;
-      netStartX = boatX;
-      netStartY = boatY;
-      netDistance = 0;  // Reset net travel distance
-      netSize = 50;  // Reset net size
-  
-      // Calculate distance to the mouse
-      float dirX = mouseX - boatX;
-      float dirY = mouseY - boatY;
-      float length = sqrt(dirX * dirX + dirY * dirY);
-      
-      // Set the actual target distance (cap at maxRange)
-      targetDistance = min(length, maxRange);
-      
-      // Normalize direction
-      netDirX = dirX / length;
-      netDirY = dirY / length;
-    }
-    if (netThrown && netLanded) {
-      isRetracting = true;
-    }
+void boatMousePressed() {
+  if (!netThrown) {
+    netThrown = true;
+    netX = boatX;
+    netY = boatY;
+    netStartX = boatX;
+    netStartY = boatY;
+    netDistance = 0;  // Reset net travel distance
+    netSize = 50;  // Reset net size
+
+    // Calculate distance to the mouse
+    float dirX = mouseX - boatX;
+    float dirY = mouseY - boatY;
+    float length = sqrt(dirX * dirX + dirY * dirY);
+    
+    // Set the actual target distance (cap at maxRange)
+    targetDistance = min(length, maxRange);
+    
+    // Normalize direction
+    netDirX = dirX / length;
+    netDirY = dirY / length;
+  }
+  if (netThrown && netLanded) {
+    isRetracting = true;
   }
 }
+
   
 void retract() {
   if(isRetracting) {
@@ -173,11 +200,10 @@ void drawNet() {
   // Draw tether from boat to net
   line(boatX, boatY, netX, netY);
 
-  // Draw web structure
+  // Draw web structure dependant on maximum amount of cans
   ellipse(netX, netY, netSize, netSize);
-  
-  for (int i = 0; i < 8; i++) {
-    float angle = TWO_PI / 8 * i;
+  for (int i = 0; i < netMax; i++) {
+    float angle = TWO_PI / netMax * i;
     float x = netX + cos(angle) * netSize / 2;
     float y = netY + sin(angle) * netSize / 2;
     line(netX, netY, x, y);
