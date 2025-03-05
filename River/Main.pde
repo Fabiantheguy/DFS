@@ -16,14 +16,14 @@ void setup() {
 void draw() {
   riverDraw();
   boatDraw();
-  //b.currencyMousePressed();
+
 }
 
 void mousePressed() {
   if (mouseButton == LEFT) {      
     inputHandler.handleMousePress();
     boatMousePressed();
-    //currencyMousePressed();
+
   }
 }
 

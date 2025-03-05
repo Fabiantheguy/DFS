@@ -16,8 +16,17 @@ class Button{
     switch(type) {
       case "range":
         pos = new PVector(1500.0, 100.0);
-        
-         
+        break;
+      case "size":
+        pos = new PVector(1500.0, 400.0);
+        break;
+      case "value":
+        pos = new PVector(100.0, 400.0);
+        break;
+      default:
+        pos = new PVector(100.0, 100.0);
+        break;
+      }   
     }
   }
  
@@ -50,6 +59,6 @@ void currencyMousePressed(){
         
         
         
-  }
+
 
 // Currency
