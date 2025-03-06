@@ -1,7 +1,8 @@
-Button b;
+
 
 void settings() {
   fullScreen(); // Set the game to full-screen mode
+  noSmooth(); // anti allias
 }
 
 void setup() {
@@ -10,20 +11,20 @@ void setup() {
     inputHandler.setMousePressCommand(new ThrowNetCommand());
     riverSetup();
     boatSetup();
-    //b = Button("type");
+    currencySetup();
 }
 
 void draw() {
   riverDraw();
   boatDraw();
-
+  currencyDraw();
 }
 
 void mousePressed() {
   if (mouseButton == LEFT) {      
     inputHandler.handleMousePress();
     boatMousePressed();
-
+    
   }
 }
 

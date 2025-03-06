@@ -1,51 +1,33 @@
-class Button{
-  PVector pos;
-  PVector size;
-  PFont buttonFont;
-  color buttonColor, fontColor;
-  
-  //hitboxes for button
-  float left, right, bot, top;
-  
-  Button(String type){
-    size = new PVector(320.0, 140.0);
-    buttonFont = loadFont("Verdana-30.vlw");
-    buttonColor = #000000;
-    fontColor = #FFFFFF;
-    
-    switch(type) {
-      case "range":
-        pos = new PVector(1500.0, 100.0);
-        break;
-      case "size":
-        pos = new PVector(1500.0, 400.0);
-        break;
-      case "value":
-        pos = new PVector(100.0, 400.0);
-        break;
-      default:
-        pos = new PVector(100.0, 100.0);
-        break;
-      }   
-    }
-  }
+float[] buttonPos = {100, 400, 1500}; // positon of the button
+PVector buttonSize; // width and length of button
+PFont buttonFont; // font of the text
+color buttonColor, fontColor; // colour of the button and the 
+
+void currencySetup(){
+  buttonFont = loadFont("Verdana-Bold-30.vlw");
+  textAlign(CENTER, CENTER);  
+  textFont(buttonFont);
+  buttonSize = new PVector(320.0, 140.0);
+
+ 
+}
+
+
+
  
 
     
 
     
-int money = 100;
-void currencyMousePressed(){
+
+void currencyDraw(){
   noStroke();
-  fill(#000000);
+  fill(buttonColor);
   rect(100, 100, 320, 140);
   rect(1500, 100, 320, 140);
-  //rect(100, 400, 320, 140);
+  rect(100, 400, 320, 140);
   rect(1500, 400, 320, 140);
   fill(#FFFFFF);
-  textFont(buttonFont);
-  textSize(30);
-  textAlign(CENTER, CENTER);
   text("Boat Speed", 255, 150);
   text("Cost: " + 5, 255, 200);
   text("Net Range", 1660, 150);
@@ -54,11 +36,7 @@ void currencyMousePressed(){
   text("Cost: " + 5, 255, 500);
   text("Net Maximum", 1660, 450);
   text("Cost: " + 5, 1660, 500);
-  
-}        
+}
         
         
         
-
-
-// Currency
