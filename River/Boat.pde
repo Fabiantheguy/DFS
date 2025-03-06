@@ -160,6 +160,9 @@ void boatMousePressed() {
     netY = boatY;
     netStartX = boatX;
     netStartY = boatY;
+    
+    boatY = getRiverY(boatX);    
+    
     netDistance = 0;  // Reset net travel distance
     netSize = 50;  // Reset net size
 
