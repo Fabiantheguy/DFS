@@ -2,7 +2,6 @@
 
 void settings() {
   fullScreen(); // Set the game to full-screen mode
-  noSmooth(); // anti allias
 }
 
 void setup() {

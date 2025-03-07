@@ -52,8 +52,7 @@ void riverDraw() {
   // Draw the rectangular start of the river
   rect(riverX, 0, riverWidth, height);
 
-<<<<<<< Updated upstream
-=======
+
   // Now draw the curved part of the river after the initial rectangle
   beginShape();
   for (int i = 0; i < riverSegments; i++) {
@@ -84,5 +83,5 @@ float getRiverY(float x) {
   // Return the Y position of the river for a given X (to match the boat's Y position)
   int segment = int(map(x, riverX, riverX + riverWidth, 0, riverSegments - 1));
   return riverPaths[segment].y + riverOffset;
->>>>>>> Stashed changes
+
 }
