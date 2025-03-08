@@ -23,8 +23,8 @@ void mousePressed() {
   if (mouseButton == LEFT) {      
     inputHandler.handleMousePress();
     boatMousePressed();
-    
   }
+  currencyMousePressed();
 }
 
 void mouseReleased() {

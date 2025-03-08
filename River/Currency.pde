@@ -7,7 +7,7 @@ PVector buttonSize; // width and length of button
 PFont buttonFont; // font of the text
 color buttonColor, fontColor; // colour of the button and the font
 
-int money = 0; // currency for collecting cans
+int money = 100; // currency for collecting cans
 int[] netUpgrades = {15, 20, 15, 20};
 int[] canBoatUpgrades = {5, 10, 5, 10};
 
@@ -41,7 +41,18 @@ void currencyDraw(){
 }
 
 void currencyMousePressed(){
-  
+  for(int i = 0; i < buttonPos.length; i++){
+    if(mouseX > buttonPos[i] && 
+    mouseX < 100 &&
+    mouseX < 100 &&
+    mouseY > buttonSize.x && 
+    mouseY < buttonSize.y &&
+    money <= netUpgrades[i] && 
+    money >= canBoatUpgrades[i]){
+      buttonColor = #00ff00;
+    }
+    
+  }
 }
         
         
