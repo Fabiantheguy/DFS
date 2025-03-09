@@ -24,10 +24,13 @@ void mousePressed() {
     inputHandler.handleMousePress();
     boatMousePressed();
   }
-  currencyMousePressed();
 }
 
 void mouseReleased() {
+}
+
+void mouseClicked(){
+  currency
 }
 
 void keyPressed() {

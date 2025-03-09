@@ -11,6 +11,8 @@ int money = 100; // currency for collecting cans
 int[] netUpgrades = {15, 20, 15, 20};
 int[] canBoatUpgrades = {5, 10, 5, 10};
 
+
+
 void currencySetup(){
   buttonFont = loadFont("Verdana-Bold-30.vlw"); // Cute Font :3
   textAlign(CENTER, CENTER); // makes text spawn in the middle of the coordinates
@@ -40,19 +42,6 @@ void currencyDraw(){
   }
 }
 
-void currencyMousePressed(){
-  for(int i = 0; i < buttonPos.length; i++){
-    if(mouseX > buttonPos[i] && 
-    mouseX < 100 &&
-    mouseX < 100 &&
-    mouseY > buttonSize.x && 
-    mouseY < buttonSize.y &&
-    money <= netUpgrades[i] && 
-    money >= canBoatUpgrades[i]){
-      buttonColor = #00ff00;
-    }
-    
-  }
-}
+class purchaseMadeCommand implements Command {
         
         
