@@ -34,7 +34,7 @@ void boatDraw() {
   boatX = lerp(boatX, boatTargetX, 0.1);
   drawBoat();
   retract();
-  
+
   // Track the distance between the boat and the net
   float distanceToBoat = dist(netX, netY, boatX, boatY);
   if (netThrown) {
@@ -59,13 +59,20 @@ void boatDraw() {
         // Let the net slowly fall down until it reaches max range
         netY += fallSpeed;
       }
-      
+
       // Apply velocity and gradual slowdown
       netVelocityX *= deceleration;
       netVelocityY *= deceleration;
       netX += netVelocityX;
       netY += netVelocityY;
-      
+
+      // Constrain net position within river bounds at its Y position
+      float xOffset = sin((netY + riverOffset) * waveFrequency) * waveAmplitude;
+      float leftBound = riverX + xOffset + 10;
+      float rightBound = riverX + xOffset + riverWidth - 10;
+
+      netX = constrain(netX, leftBound, rightBound);
+
       // Once net reaches the boat, reset everything for a new throw
       if (distanceToBoat < 50) {
         netLanded = false; // Ready for a new throw
@@ -74,77 +81,89 @@ void boatDraw() {
         netSize = 0; // Reset net size
       }
     }
-    
+
     drawNet();
   }
 }
 
 class MoveLeftCommand implements Command {
-    public void execute() {
-        movingLeft = true;
-    }
+  public void execute() {
+    movingLeft = true;
+  }
 }
 
 class MoveRightCommand implements Command {
-    public void execute() {
-        movingRight = true;
-    }
+  public void execute() {
+    movingRight = true;
+  }
 }
 
 class StopMoveLeftCommand implements Command {
-    public void execute() {
-        movingLeft = false;
-    }
+  public void execute() {
+    movingLeft = false;
+  }
 }
 
 class StopMoveRightCommand implements Command {
-    public void execute() {
-        movingRight = false;
-    }
+  public void execute() {
+    movingRight = false;
+  }
 }
 
 class ThrowNetCommand implements Command {
-    public void execute() {
-        if (!netThrown) {
-            netThrown = true;
-            netX = boatX;
-            netY = boatY;
-            netStartX = boatX;
-            netStartY = boatY;
-            netDistance = 0;
-            netSize = 50;
+  public void execute() {
+    if (!netThrown) {
+      netThrown = true;
+      netX = boatX;
+      netY = boatY;
+      netStartX = boatX;
+      netStartY = boatY;
+      netDistance = 0;
+      netSize = 50;
 
-            float dirX = mouseX - boatX;
-            float dirY = mouseY - boatY;
-            float length = sqrt(dirX * dirX + dirY * dirY);
-            targetDistance = min(length, maxRange);
-            netDirX = dirX / length;
-            netDirY = dirY / length;
-        }
-        if (netThrown && netLanded) {
-            isRetracting = true;
-        }
+      float dirX = mouseX - boatX;
+      float dirY = mouseY - boatY;
+      float length = sqrt(dirX * dirX + dirY * dirY);
+      targetDistance = min(length, maxRange);
+      netDirX = dirX / length;
+      netDirY = dirY / length;
+
+      // Constrain net's starting X position within river bounds
+      float xOffset = sin((netY + riverOffset) * waveFrequency) * waveAmplitude;
+      float leftBound = riverX + xOffset + 10;
+      float rightBound = riverX + xOffset + riverWidth - 10;
+      netX = constrain(netX, leftBound, rightBound);
     }
+    if (netThrown && netLanded) {
+      isRetracting = true;
+    }
+  }
 }
 
 void move() {
   if (movingLeft) {
-    boatTargetX -= boatSpeed; 
+    boatTargetX -= boatSpeed;
   }
   if (movingRight) {
     boatTargetX += boatSpeed;
   }
-  boatTargetX = constrain(boatTargetX, riverX + 25, riverX + riverWidth - 25);
+
+  // Get river boundaries at the boat's Y position
+  float xOffset = sin((boatY + riverOffset) * waveFrequency) * waveAmplitude;
+  float leftBound = riverX + xOffset + 25;
+  float rightBound = riverX + xOffset + riverWidth - 25;
+
+  boatTargetX = constrain(boatTargetX, leftBound, rightBound);
 }
 
 void drawBoat() {
   fill(139, 69, 19);
   stroke(200, 50, 10);
   strokeWeight(2);
-  
+
   float w = 40;
   float h = 60;
-  
+
   beginShape();
   vertex(boatX - w / 2, boatY + h / 2);
   vertex(boatX + w / 2, boatY + h / 2);
@@ -160,6 +179,9 @@ void boatMousePressed() {
     netY = boatY;
     netStartX = boatX;
     netStartY = boatY;
+
+    //boatY = getRiverY(boatX);
+
     netDistance = 0;  // Reset net travel distance
     netSize = 50;  // Reset net size
 
@@ -167,10 +189,10 @@ void boatMousePressed() {
     float dirX = mouseX - boatX;
     float dirY = mouseY - boatY;
     float length = sqrt(dirX * dirX + dirY * dirY);
-    
+
     // Set the actual target distance (cap at maxRange)
     targetDistance = min(length, maxRange);
-    
+
     // Normalize direction
     netDirX = dirX / length;
     netDirY = dirY / length;
@@ -180,9 +202,9 @@ void boatMousePressed() {
   }
 }
 
-  
+
 void retract() {
-  if(isRetracting) {
+  if (isRetracting) {
     netVelocityX += (boatX - netX) * 0.002;
     netVelocityY += (boatY - netY) * 0.002;
     netVelocityX *= deceleration;
@@ -208,4 +230,10 @@ void drawNet() {
     float y = netY + sin(angle) * netSize / 2;
     line(netX, netY, x, y);
   }
+
+  // Ensure net stays within river bounds
+  float xOffset = sin((netY + riverOffset) * waveFrequency) * waveAmplitude;
+  float leftBound = riverX + xOffset + 10;
+  float rightBound = riverX + xOffset + riverWidth - 10;
+  netX = constrain(netX, leftBound, rightBound);
 }

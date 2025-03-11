@@ -2,7 +2,6 @@
 
 void settings() {
   fullScreen(); // Set the game to full-screen mode
-  noSmooth(); // anti allias
 }
 
 void setup() {
@@ -24,11 +23,13 @@ void mousePressed() {
   if (mouseButton == LEFT) {      
     inputHandler.handleMousePress();
     boatMousePressed();
-    
   }
 }
 
 void mouseReleased() {
+}
+
+void mouseClicked(){
 }
 
 void keyPressed() {
