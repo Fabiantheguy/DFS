@@ -45,4 +45,19 @@ void draw(){
   vertex(400,470);
   
   endShape(CLOSE);
+  
+  beginShape();
+   
+  fill(#5F5F5F);
+    // (x, y)\y/ --> x
+  vertex(100, 510);
+  vertex(150, 550);
+  vertex(165, 525);
+  vertex(115, 487);
+  //curve(150, 600, 200, 650, 250, 700, 300, 750);
+  
+  
+  
+  endShape(CLOSE);
+  
 }
