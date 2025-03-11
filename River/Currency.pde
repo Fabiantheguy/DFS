@@ -42,7 +42,13 @@ void currencyDraw(){
   }
 }
 
-class Singleton {
+class moneyLoss {
+  private static moneyLoss instance; // makes variable in just this class 
+  
+  
+  
+  
+  
   
   
 }
