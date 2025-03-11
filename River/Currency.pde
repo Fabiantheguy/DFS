@@ -42,6 +42,11 @@ void currencyDraw(){
   }
 }
 
-class purchaseMadeCommand implements Command {
+class Singleton {
+  
+  
+}
+  
+
         
         

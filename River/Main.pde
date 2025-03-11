@@ -30,7 +30,6 @@ void mouseReleased() {
 }
 
 void mouseClicked(){
-  currency
 }
 
 void keyPressed() {
