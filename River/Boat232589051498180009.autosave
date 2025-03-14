@@ -1,4 +1,3 @@
-
 boolean netThrown = false;
 boolean netLanded = false;
 float netX, netY, netStartX, netStartY;
@@ -6,7 +5,7 @@ float boatX = 300, boatY = 400;
 float boatTargetX = boatX;
 boolean movingLeft = false, movingRight = false;
 int netMax = 4; // Amount of cans that fit in the net
-float boatSpeed = .8; // Boat's movement speed
+float boatSpeed = 5; // Boat's movement speed
 
 // Net movement variables
 float netDirX, netDirY;
@@ -23,7 +22,7 @@ float netVelocityX = 0;
 float netVelocityY = 0;
 float deceleration = 0.95; // Gradual slowdown effect
 float fallSpeed = 0.5; // Speed at which the net falls down
-
+// Boat movement setup
 void boatSetup() {
   boatX = width / 2;
   boatY = height - 500;
@@ -31,12 +30,12 @@ void boatSetup() {
 }
 
 void boatDraw() {
-  move();
-  boatX = lerp(boatX, boatTargetX, 0.1);
-  drawBoat();
-  retract();
+  move(); // Move the boat according to player input
+  boatX = lerp(boatX, boatTargetX, 0.1); // Smooth transition for boat
+  drawBoat(); // Draw the boat
+  retract(); // Handle net retraction when needed
 
-  // Track the distance between the boat and the net
+  // Calculate the distance between the boat and the net to handle its movement
   float distanceToBoat = dist(netX, netY, boatX, boatY);
   if (netThrown) {
     if (!netLanded) {
@@ -46,9 +45,6 @@ void boatDraw() {
         netY += netDirY * netSpeed;
         netDistance += netSpeed;
         netSize = map(netDistance, 0, targetDistance, 20, maxNetSize);
-        
-        // Constrain net's position within river bounds while being thrown
-        constrainNetPosition();
       } else {
         netLanded = true;
       }
@@ -70,30 +66,21 @@ void boatDraw() {
       netX += netVelocityX;
       netY += netVelocityY;
 
-      // Constrain net's position during retraction
+      // Constrain net position within river bounds at its Y position
       constrainNetPosition();
-
-      // Once net reaches the boat, reset everything for a new throw
+      
+      // Reset net when it reaches the boat
       if (distanceToBoat < 50) {
         netLanded = false; // Ready for a new throw
         netThrown = false;
         isRetracting = false;
         netSize = 0; // Reset net size
-        collectCans();  // Collect cans once the net collides with the boat
-
       }
     }
-    
-    drawNet();
-    
-    
+
+    drawNet(); // Draw the net
   }
-
-
-  // Draw collected cans count at the top right
-  displayCollectedCans();
 }
-
 
 class MoveLeftCommand implements Command {
   public void execute() {
@@ -139,9 +126,9 @@ class ThrowNetCommand implements Command {
 
       // Constrain net's starting X position within river bounds
       float xOffset = sin((netY + riverOffset) * waveFrequency) * waveAmplitude;
-      float leftBound = riverX + xOffset;  // Right boundary now left
-      float rightBound = riverX + xOffset + riverWidth;  // Left boundary now right
-      netX = constrain(netX, leftBound + 10, rightBound - 10);
+      float leftBound = riverX + xOffset + 10;
+      float rightBound = riverX + xOffset + riverWidth - 10;
+      netX = constrain(netX, leftBound, rightBound);
     }
     if (netThrown && netLanded) {
       isRetracting = true;
@@ -149,53 +136,48 @@ class ThrowNetCommand implements Command {
   }
 }
 
-
+// Boat movement constraints based on the dynamic width of the river
+// Boat movement constraints based on the dynamic width of the river
 void move() {
-  if (movingLeft && !gamePaused) {
+  if (movingLeft) {
     boatTargetX -= boatSpeed;
   }
-  if (movingRight && !gamePaused) {
+  if (movingRight) {
     boatTargetX += boatSpeed;
   }
 
-  // Get river boundaries at the boat's Y position
-  float xOffset = sin((boatY + riverOffset) * waveFrequency) * waveAmplitude;
-  float leftBound = riverX + xOffset; 
-  float rightBound = riverX + xOffset + riverWidth;
-  boatTargetX = constrain(boatTargetX, leftBound + 25, rightBound - 25);
-}
+  // Get dynamic river width at boat's Y position
+  float dynamicWaveAmplitude = waveAmplitude + sin(boatY * 0.001) * waveVariation;
+  float dynamicWidth = riverWidth + sin((boatY + riverOffset) * 0.001) * widthVariation;
+  float xOffset = sin((boatY + riverOffset) * (waveFrequency + directionBias)) * dynamicWaveAmplitude;
+  
+  // Calculate the left and right river boundaries at boatY, considering the river width and wave offset
+  float leftBound = riverX + xOffset - dynamicWidth / 2 + 25; // Add margin and account for boat width
+  float rightBound = riverX + xOffset + dynamicWidth / 2 + 15; // Add margin and account for boat width
 
-void drawBoat() {
-  if (!gamePaused) {
-  fill(139, 69, 19);
-  stroke(200, 50, 10);
-  strokeWeight(2);
-  float w = 40;
-  float h = 60;
-
-  beginShape();
-  vertex(boatX - w / 2, boatY + h / 2);
-  vertex(boatX + w / 2, boatY + h / 2);
-  vertex(boatX + w * 0.7 / 2, boatY - h / 2);
-  vertex(boatX - w * 0.7 / 2, boatY - h / 2);
-  endShape(CLOSE);
-  }
+  boatTargetX = constrain(boatTargetX, leftBound, rightBound); // Constrain boat movement within river bounds
 }
 
 void boatMousePressed() {
-  if (!netThrown && !gamePaused) {
+  if (!netThrown) {
     netThrown = true;
     netX = boatX;
     netY = boatY;
     netStartX = boatX;
     netStartY = boatY;
-    netDistance = 0;
-    netSize = 50;
 
+    netDistance = 0;  // Reset net travel distance
+    netSize = 50;  // Reset net size
+
+    // Calculate distance to the mouse
     float dirX = mouseX - boatX;
     float dirY = mouseY - boatY;
     float length = sqrt(dirX * dirX + dirY * dirY);
+
+    // Set the actual target distance (cap at maxRange)
     targetDistance = min(length, maxRange);
+
+    // Normalize direction
     netDirX = dirX / length;
     netDirY = dirY / length;
   }
@@ -214,67 +196,57 @@ void retract() {
     netY += netVelocityY;
   }
 }
+// Draw the boat
+// Draw the boat
+void drawBoat() {
+  fill(139, 69, 19);
+  stroke(200, 50, 10);
+  strokeWeight(2);
 
-// Track the number of cans in the net
+  float w = 40;
+  float h = 60;
 
-void collectCans() {
-  // When the net reaches the boat, check for can collection
-  for (int i = cansInNet - 1; i >= 0; i--) {
-    Can can = cans.get(i);
-      cansInNet = 0;  // Increment the number of cans in the net
-      totalCansCollected++;  // Increment the total cans collected
-      
-  }
+  beginShape();
+  vertex(boatX - w / 2, boatY + h / 2);
+  vertex(boatX + w / 2, boatY + h / 2);
+  vertex(boatX + w * 0.7 / 2, boatY - h / 2);
+  vertex(boatX - w * 0.7 / 2, boatY - h / 2);
+  endShape(CLOSE);
 }
-// Track the number of cans in the net
 
+// Net movement and drawing
 void drawNet() {
   stroke(255);
   fill(200);
   strokeWeight(2);
-  
-  // Draw the line connecting the boat and the net
+
+  // Draw tether from boat to net
   line(boatX, boatY, netX, netY);
-  
-  // Draw the net's center circle
+
+  // Draw web structure dependent on maximum amount of cans
   ellipse(netX, netY, netSize, netSize);
-  
-  // Draw the 4 slices of the net, darken based on cansInNet
-  for (int i = 0; i < 4; i++) {
-    // Calculate the angle for each slice
-    float startAngle = TWO_PI / 4 * i;
-    float endAngle = TWO_PI / 4 * (i + 1);
-    
-    // If this slice is filled, darken it
-    if (i < cansInNet) {
-      fill(150);  // Darker color for filled slices
-    } else {
-      fill(200, 200, 200);  // Lighter color for empty slices
-    }
-    
-    // Draw the slice as a pie wedge
-    arc(netX, netY, netSize, netSize, startAngle, endAngle, PIE);
-  }
-  
-  // Draw the lines connecting the center to the corners
-  for (int i = 0; i < 4; i++) {
-    float angle = TWO_PI / 4 * i;
+  for (int i = 0; i < netMax; i++) {
+    float angle = TWO_PI / netMax * i;
     float x = netX + cos(angle) * netSize / 2;
     float y = netY + sin(angle) * netSize / 2;
     line(netX, netY, x, y);
   }
 }
 
-
-
-
-// Function to constrain the net's X position within the river bounds
+// Constrain net position based on dynamic river width at net's Y position
 void constrainNetPosition() {
-  // Get the current offset based on the net's Y position to account for wave effects
-  float xOffset = sin((netY + riverOffset) * waveFrequency) * waveAmplitude;
-  float leftBound = riverX + xOffset;  // Left boundary of the river
-  float rightBound = riverX + xOffset + riverWidth;  // Right boundary of the river
+  // Calculate dynamic wave effects for net
+  float dynamicWaveAmplitude = waveAmplitude + sin(netY * 0.001) * waveVariation;
+  float dynamicWidth = riverWidth + sin((netY + riverOffset) * 0.001) * widthVariation;
+  float xOffset = sin((netY + riverOffset) * (waveFrequency + directionBias)) * dynamicWaveAmplitude;
 
-  // Constrain the net’s X position within the calculated bounds
-  netX = constrain(netX, leftBound + 10, rightBound - 10);
+  // Calculate left and right boundaries of the river at net's Y position
+  float leftBound = riverX + xOffset + 10 + netSize / 2; // Adding margin and half net size
+  float rightBound = riverX + xOffset + riverWidth - 10 - netSize / 2; // Adding margin and half net size
+
+  // Constrain the net's center (netX) within the left and right bounds of the river
+  netX = constrain(netX, leftBound, rightBound);
+
+  // Ensure the net stays within the visible river and doesn't go out of the background ("blue")
+  netX = constrain(netX, riverX + 10 + netSize / 2, riverX + riverWidth - 10 - netSize / 2);
 }

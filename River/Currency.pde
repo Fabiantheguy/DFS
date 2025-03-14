@@ -43,15 +43,15 @@ void currencyDraw(){
 }
 
 class moneyLoss {
-  private static moneyLoss instance; // makes variable in just this class 
-  
-  
-  
-  
-  
-  
-  
+  //private static moneyLoss instance; // makes variable in just this class 
 }
+  
+  
+  
+  
+  
+  
+
   
 
         
