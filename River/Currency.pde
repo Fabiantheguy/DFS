@@ -13,27 +13,36 @@ int[] canBoatUpgrades = {5, 10, 5, 10};
 
 
 
-void currencySetup(){
+void currencySetup() {
   buttonFont = loadFont("Verdana-Bold-30.vlw"); // Cute Font :3
   textAlign(CENTER, CENTER); // makes text spawn in the middle of the coordinates
   textFont(buttonFont); // every text is in this amazing font
-  buttonSize = new PVector(320.0, 140.0); // all buttons are the same size 
+  buttonSize = new PVector(320.0, 140.0); // all buttons are the same size
   buttonColor = #000000; // boring black
   fontColor = #FFFFFF; // boring white
 }
 
-void currencyDraw(){
+void currencyDraw() {
   noStroke();
   // a rectangle spawns at these amazing spots
-  for(int i = 0; i < buttonPos.length; i++){ 
+  for (int i = 0; i < buttonPos.length; i++) {
     fill(buttonColor);
     rect(buttonPos[i], 100, buttonSize.x, buttonSize.y);
     rect(buttonPos[i], 400, buttonSize.x, buttonSize.y);
+    if (mousePressed == true &&
+      mouseX > 100 &&
+      mouseX < 100 + 1500 &&
+      mouseY < 100 &&
+      mouseY > 100 + buttonSize.y/2.0 &&
+      gamePaused == true &&
+      money >= canBoatUpgrades[0]) {
+      fill(#00ff00);
+    }
   }
-  
+
   fill(fontColor);
   // allows text to not overlap on all the buttons
-  for(int i = 2; i < upgrades.length; i++){
+  for (int i = 2; i < upgrades.length; i++) {
     fill(fontColor);
     text(upgrades[i], textPosX[i % 2], textPosY[i]);
     text(upgrades[i % 2], textPosX[i % 2], textPosY[i % 2]);
@@ -42,11 +51,6 @@ void currencyDraw(){
   }
 }
 
-class Singleton {
-  
-  
+class moneyLoss {
+  //private static moneyLoss instance; // makes variable in just this class
 }
-  
-
-        
-        

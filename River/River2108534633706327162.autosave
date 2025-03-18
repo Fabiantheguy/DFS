@@ -1,0 +1,38 @@
+float riverX, riverWidth = 400;
+float riverSpeed = 2;
+float riverOffset = 0;
+float waveFrequency = 0.002; // Controls how often the river curves
+float waveAmplitude = 100; // Controls how wide the curves are
+float waveVariation = 50; // Added variation to amplitude
+float directionBias = 0.0005; // Slight bias to swerve more in one direction
+float widthVariation = 100; // Increased variation in river width
+
+void riverSetup() {
+  riverX = width / 2 - riverWidth / 2;
+}
+
+void riverDraw() {
+  background(100, 150, 255);
+  background(50, 255, 50);
+  noStroke();
+  fill(30, 100, 200);
+
+  riverOffset -= riverSpeed; // Reverse direction by decreasing offset
+
+  beginShape();
+  for (int y = height; y >= 0; y -= 5) { // Reverse direction, start from the top
+    float dynamicWaveAmplitude = waveAmplitude + sin(y * 0.001) * waveVariation;
+    float dynamicWidth = riverWidth + sin((y + riverOffset) * 0.001) * widthVariation;
+    float xOffset = sin((y + riverOffset) * (waveFrequency + directionBias)) * dynamicWaveAmplitude;
+    float leftX = riverX + xOffset - dynamicWidth / 2;
+    curveVertex(leftX, y);
+  }
+  for (int y = 0; y <= height + 2000; y += 5) {
+    float dynamicWaveAmplitude = waveAmplitude + cos(y * 0.001) * waveVariation;
+    float dynamicWidth = riverWidth + cos((y + riverOffset) * 0.001) * widthVariation;
+    float xOffset = sin((y + riverOffset) * (waveFrequency + directionBias)) * dynamicWaveAmplitude;
+    float rightX = riverX + xOffset + dynamicWidth / 2;
+    curveVertex(rightX, y);
+  }
+  endShape(CLOSE);
+}

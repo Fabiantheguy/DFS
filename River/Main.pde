@@ -14,15 +14,21 @@ void setup() {
 }
 
 void draw() {
+  
   riverDraw();
+  canDraw();
   boatDraw();
   currencyDraw();
+  logDraw();
 }
 
 void mousePressed() {
   if (mouseButton == LEFT) {      
     inputHandler.handleMousePress();
     boatMousePressed();
+  if (gamePaused && mouseX > width / 2 - 50 && mouseX < width / 2 + 50 && mouseY > height / 2 - 25 && mouseY < height / 2 + 25) {
+      resetGame();  // Reset the game to continue at the river
+    }
   }
 }
 
