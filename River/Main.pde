@@ -30,6 +30,8 @@ void mousePressed() {
       resetGame();  // Reset the game to continue at the river
     }
   }
+ 
+  currencyMousePressed();
 }
 
 void mouseReleased() {

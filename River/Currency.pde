@@ -24,21 +24,18 @@ void currencySetup() {
 
 void currencyDraw() {
   noStroke();
+  println(mouseY);
   // a rectangle spawns at these amazing spots
   for (int i = 0; i < buttonPos.length; i++) {
     fill(buttonColor);
     rect(buttonPos[i], 100, buttonSize.x, buttonSize.y);
     rect(buttonPos[i], 400, buttonSize.x, buttonSize.y);
-    if (mousePressed == true &&
-      mouseX > 100 &&
-      mouseX < 100 + 1500 &&
-      mouseY < 100 &&
-      mouseY > 100 + buttonSize.y/2.0 &&
-      gamePaused == true &&
-      money >= canBoatUpgrades[0]) {
-      fill(#00ff00);
-    }
   }
+
+
+
+
+
 
   fill(fontColor);
   // allows text to not overlap on all the buttons
@@ -48,9 +45,29 @@ void currencyDraw() {
     text(upgrades[i % 2], textPosX[i % 2], textPosY[i % 2]);
     text("Cost: " + netUpgrades[i], textPosX[i % 2], textPosY[i] + 50);
     text("Cost: " + canBoatUpgrades[i], textPosX[i % 2], textPosY[i % 2] + 50);
+    textSize(20);
+    text("Collected Cans: " + money, width - 125, 20);
   }
 }
 
-class moneyLoss {
-  //private static moneyLoss instance; // makes variable in just this class
+void currencyMousePressed() {
+  if (mouseX > 100 && mouseX < 415 && mouseY > 100 && mouseY < 240 && gamePaused == true && money >= canBoatUpgrades[0]) {
+    boatSpeed += 0.0125;
+    money -= canBoatUpgrades[0];
+  }
 }
+//class upgradesPurchased {
+//  upgrade(){
+//  }
+
+//  void statUpgrades() {
+//  }
+
+//  void moneyLossed(){
+//  }
+//}
+
+
+//class boatUpgrade extends upgradesPurchased {
+
+//}
