@@ -162,21 +162,24 @@ void move() {
   boatTargetX = constrain(boatTargetX, leftBound + 25, rightBound - 25);
 }
 
+// Modify the drawBoat() function to hide the boat during the checkpoint screen
 void drawBoat() {
-  if (!gamePaused) {
-    fill(139, 69, 19);
-    stroke(200, 50, 10);
-    strokeWeight(2);
-    float w = 40;
-    float h = 60;
-
-    beginShape();
-    vertex(boatX - w / 2, boatY + h / 2);
-    vertex(boatX + w / 2, boatY + h / 2);
-    vertex(boatX + w * 0.7 / 2, boatY - h / 2);
-    vertex(boatX - w * 0.7 / 2, boatY - h / 2);
-    endShape(CLOSE);
+  if (gamePaused) {
+    return;  // Don't draw the boat if paused
   }
+
+  fill(139, 69, 19);
+  stroke(200, 50, 10);
+  strokeWeight(2);
+  float w = 40;
+  float h = 60;
+
+  beginShape();
+  vertex(boatX - w / 2, boatY + h / 2);
+  vertex(boatX + w / 2, boatY + h / 2);
+  vertex(boatX + w * 0.7 / 2, boatY - h / 2);
+  vertex(boatX - w * 0.7 / 2, boatY - h / 2);
+  endShape(CLOSE);
 }
 
 void boatMousePressed() {
