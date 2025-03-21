@@ -227,6 +227,9 @@ void collectCans() {
 // Track the number of cans in the net
 
 void drawNet() {
+  if (gamePaused) {
+    return;
+  }
   stroke(255);
   fill(200);
   strokeWeight(2);

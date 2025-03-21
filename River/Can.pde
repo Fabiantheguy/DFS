@@ -88,6 +88,7 @@ float canSpawnInterval = 2000;  // Interval between can spawns (in milliseconds)
 
 // Modify the can drawing behavior to prevent picking up cans if the net is full
 void canDraw() {
+  fill(100, 100, 100);
   for (int i = cans.size() - 1; i >= 0; i--) {
     Can can = cans.get(i);
     constrainCanPosition(can);
@@ -121,4 +122,6 @@ void displayCollectedCans() {
   textSize(20);
   textAlign(RIGHT, TOP);
   text("Collected Cans: " + totalCansCollected, width - 20, 20);
+  text("Collected Cans: " + cansInNet, width - 20, 100);
+
 }

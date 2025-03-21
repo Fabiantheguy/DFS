@@ -18,7 +18,10 @@ void draw() {
   riverDraw();
   canDraw();
   boatDraw();
-  currencyDraw();
+  checkpointDraw();
+  if (gamePaused) {
+    currencyDraw();
+  }
 }
 
 void mousePressed() {

@@ -39,11 +39,10 @@ void riverDraw() {
     curveVertex(rightX, y);
   }
   endShape(CLOSE);
-  
-  drawCheckpoint();
 }
 
-void drawCheckpoint() {
+void checkpointDraw() {
+  stroke(0);
   if (millis() - startTime > checkPointTimer) { 
     showCheckpoint = true;  
   }
