@@ -24,7 +24,13 @@ class Can {
   void display() {
     fill(150);  // Red can
     noStroke();
-    ellipse(x, y, size, size);  // Draw can as a circle
+    beginShape();
+    // PurpleCan
+    strokeWeight(0);
+    ellipse(x + 9, y + 27.5, 17.5, 2); 
+    rect(x + 0.25, y, 17.5, 27.5); 
+    ellipse(x + 9, y + 0.5, 17.5, 3.5); 
+    endShape(CLOSE);
   }
 }
 
@@ -33,6 +39,13 @@ ArrayList<Can> cans = new ArrayList<Can>();
 int cansInNet = 0;  // Keep track of the number of cans in the net
 int totalCansCollected = 0;  // Total cans collected over time
 
+void constrainCanPosition(Can can) {
+  float xOffset = sin((can.y + riverOffset) * waveFrequency) * waveAmplitude;
+  float leftBound = riverX + xOffset;
+  float rightBound = riverX + xOffset + riverWidth;
+
+  can.x = constrain(can.x, leftBound + 10, rightBound - 10);
+}
 
 // Function to update when a can is collected in the net
 void collectCan(Can can) {
@@ -63,6 +76,7 @@ void canDraw() {
   
   for (int i = cans.size() - 1; i >= 0; i--) {
     Can can = cans.get(i);
+    constrainCanPosition(can);  // Constrain can's position within the river
 
     if (can.checkCollision(netX, netY, netSize)) {
       // If the net is not full, collect the can
