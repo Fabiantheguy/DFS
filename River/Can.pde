@@ -38,6 +38,7 @@ class Can {
 ArrayList<Can> cans = new ArrayList<Can>();
 int cansInNet = 0;  // Keep track of the number of cans in the net
 int totalCansCollected = 0;  // Total cans collected over time
+int addValue = 1; // adds to the total cans collected everytime a can is brought to the boat
 
 void constrainCanPosition(Can can) {
   float xOffset = sin((can.y + riverOffset) * waveFrequency) * waveAmplitude;

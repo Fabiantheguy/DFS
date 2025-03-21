@@ -7,14 +7,13 @@ PVector buttonSize; // width and length of button
 PFont buttonFont; // font of the text
 color buttonColor, fontColor; // colour of the button and the font
 
-int money = 100; // currency for collecting cans
-int[] netUpgrades = {15, 20, 15, 20}; // cost for net upgrades
-int[] canBoatUpgrades = {5, 10, 5, 10}; // cost for can and boat upgrades
+int[] Upgrades = {5, 10, 20, 30}; // cost for net upgrades
+
 
 boatUpgrade bu;
 netRangeUpgrade nr;
 netMaxUpgrade nm;
-
+canUpgrade cu;
 
 //Subclass Sandbox Pattern for Upgrades
 abstract class upgradesPurchased {
@@ -32,8 +31,7 @@ class boatUpgrade extends upgradesPurchased { //<>//
   
   void upgradeStats() {
     boatSpeed *= scale;
-    money -= canBoatUpgrades[0];
-    canBoatUpgrades[0] *= 1.2;     
+    Upgrades[0] *= scale;
   }
   
 }
@@ -42,33 +40,29 @@ class netRangeUpgrade extends upgradesPurchased {
   
   void upgradeStats() {
     maxRange *= scale;
-     
-    }
+    Upgrades[1] *= scale;     
+  }
 }
 
 class netMaxUpgrade extends upgradesPurchased {
   
   void upgradeStats() {
     netMax *= scale;
+    Upgrades[2] *= scale;
   }
 }
 
 class canUpgrade extends upgradesPurchased {
   
   void upgradeStats(){
+    addValue += scale;
+    Upgrades[3] *= scale;
   }
   
 }
 
-// Singleton for money lossed after making a purchase of an upgrade
-//class moneyLoss {
-  
-//  private static moneyLoss instance;
-  
-//  private moneyLoss() {
-//  }
-  
-//}
+//Singleton for money lossed after making a purchase of an upgrade
+
 
 // Command Pattern for Purchase History
 class purchaseHistory {
@@ -85,16 +79,19 @@ void currencySetup() {
   bu = new boatUpgrade(); // increases the speed of the boat
   nr = new netRangeUpgrade(); // increased the range the net is thrown
   nm = new netMaxUpgrade(); // maximum net capicity upgrade
-  
+  cu = new canUpgrade(); // Value of each can you collected
 }
 
 void currencyDraw() {
   noStroke();
-  println(boatSpeed);
   
   // a rectangle spawns at these amazing spots
   for (int i = 0; i < buttonPos.length; i++) {
-    fill(buttonColor);
+    if(!gamePaused){
+      fill(125);
+    } else if(gamePaused){
+      fill(buttonColor);
+    }
     rect(buttonPos[i], 100, buttonSize.x, buttonSize.y);
     rect(buttonPos[i], 400, buttonSize.x, buttonSize.y);
   }
@@ -102,17 +99,34 @@ void currencyDraw() {
   // allows text to not overlap on all the buttons
   for (int i = 2; i < upgrades.length; i++) {
     fill(fontColor);
-    text(upgrades[i], textPosX[i % 2], textPosY[i]);
-    text(upgrades[i % 2], textPosX[i % 2], textPosY[i % 2]);
-    text("Cost: " + netUpgrades[i], textPosX[i % 2], textPosY[i] + 50);
-    text("Cost: " + canBoatUpgrades[0], textPosX[i % 2], textPosY[i % 2] + 50);
+    text(upgrades[i], textPosX[i % 2] + 50, textPosY[i]);
+    text(upgrades[i % 2], textPosX[i % 2] + 50, textPosY[i % 2]);
+    text("Cost: " + Upgrades[i], textPosX[i % 2] + 50, textPosY[i] + 50);
+    text("Cost: " + Upgrades[i % 2], textPosX[i % 2] + 50, textPosY[i % 2] + 50);
     textSize(20);
-    text("Collected Cans: " + money, width - 125, 20);
+    text("Collected Cans: " + totalCansCollected, width - 125, 20);
   }
 }
 
 void currencyMousePressed() {
-  if (mouseX > 100 && mouseX < 415 && mouseY > 100 && mouseY < 240 && gamePaused == true && money >= canBoatUpgrades[0]) {
-    nm.upgradeStats(); //<>//
+  
+  // collisions for all the buttons 
+  if (mouseX > 100 && mouseX < 415 && mouseY > 100 && mouseY < 240 && gamePaused == true && totalCansCollected >= Upgrades[0]) {
+    bu.upgradeStats(); //<>//
+    totalCansCollected -= Upgrades[0];
+  }
+  
+  if (mouseX > 1500 && mouseX < 1830 && mouseY > 100 && mouseY < 240 && gamePaused == true && totalCansCollected >= Upgrades[1]) {
+    nr.upgradeStats();
+    totalCansCollected -= Upgrades[1];
+  }
+  if (mouseX > 100 && mouseX < 415 && mouseY > 400 && mouseY < 530 && gamePaused == true && totalCansCollected >= Upgrades[2]) {
+    nm.upgradeStats();
+    totalCansCollected -= Upgrades[2];
+  }
+  
+  if (mouseX > 1500 && mouseX < 1830 && mouseY > 400 && mouseY < 530 && gamePaused == true && totalCansCollected >= Upgrades[3]) {
+    cu.upgradeStats();
+    totalCansCollected -= Upgrades[3];
   }
 }
