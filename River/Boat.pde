@@ -46,7 +46,7 @@ void boatDraw() {
         netY += netDirY * netSpeed;
         netDistance += netSpeed;
         netSize = map(netDistance, 0, targetDistance, 20, maxNetSize);
-        
+
         // Constrain net's position within river bounds while being thrown
         constrainNetPosition();
       } else {
@@ -80,13 +80,10 @@ void boatDraw() {
         isRetracting = false;
         netSize = 0; // Reset net size
         collectCans();  // Collect cans once the net collides with the boat
-
       }
     }
-    
+
     drawNet();
-    
-    
   }
 
 
@@ -160,13 +157,17 @@ void move() {
 
   // Get river boundaries at the boat's Y position
   float xOffset = sin((boatY + riverOffset) * waveFrequency) * waveAmplitude;
-  float leftBound = riverX + xOffset; 
+  float leftBound = riverX + xOffset;
   float rightBound = riverX + xOffset + riverWidth;
   boatTargetX = constrain(boatTargetX, leftBound + 25, rightBound - 25);
 }
 
+// Modify the drawBoat() function to hide the boat during the checkpoint screen
 void drawBoat() {
-  if (!gamePaused) {
+  if (gamePaused) {
+    return;  // Don't draw the boat if paused
+  }
+
   fill(139, 69, 19);
   stroke(200, 50, 10);
   strokeWeight(2);
@@ -179,7 +180,6 @@ void drawBoat() {
   vertex(boatX + w * 0.7 / 2, boatY - h / 2);
   vertex(boatX - w * 0.7 / 2, boatY - h / 2);
   endShape(CLOSE);
-  }
 }
 
 void boatMousePressed() {
@@ -221,44 +221,45 @@ void collectCans() {
   // When the net reaches the boat, check for can collection
   for (int i = cansInNet - 1; i >= 0; i--) {
     Can can = cans.get(i);
-      cansInNet = 0;  // Increment the number of cans in the net
-      totalCansCollected++;  // Increment the total cans collected
-      
+    cansInNet = 0;  // Increment the number of cans in the net
   }
 }
 // Track the number of cans in the net
 
 void drawNet() {
+  if (gamePaused) {
+    return;
+  }
   stroke(255);
   fill(200);
   strokeWeight(2);
-  
+
   // Draw the line connecting the boat and the net
   line(boatX, boatY, netX, netY);
-  
+
   // Draw the net's center circle
   ellipse(netX, netY, netSize, netSize);
-  
+
   // Draw the 4 slices of the net, darken based on cansInNet
-  for (int i = 0; i < 4; i++) {
+  for (int i = 0; i < netMax; i++) {
     // Calculate the angle for each slice
-    float startAngle = TWO_PI / 4 * i;
-    float endAngle = TWO_PI / 4 * (i + 1);
-    
+    float startAngle = TWO_PI / netMax * i;
+    float endAngle = TWO_PI / netMax * (i + 1);
+
     // If this slice is filled, darken it
     if (i < cansInNet) {
       fill(150);  // Darker color for filled slices
     } else {
       fill(200, 200, 200);  // Lighter color for empty slices
     }
-    
+
     // Draw the slice as a pie wedge
     arc(netX, netY, netSize, netSize, startAngle, endAngle, PIE);
   }
-  
+
   // Draw the lines connecting the center to the corners
-  for (int i = 0; i < 4; i++) {
-    float angle = TWO_PI / 4 * i;
+  for (int i = 0; i < netMax; i++) {
+    float angle = TWO_PI / netMax * i;
     float x = netX + cos(angle) * netSize / 2;
     float y = netY + sin(angle) * netSize / 2;
     line(netX, netY, x, y);
