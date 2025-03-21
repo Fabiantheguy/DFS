@@ -113,3 +113,22 @@ void logDraw(){
 
 
 }
+
+//Log 1 That Moves
+
+ // beginShape();
+ // vertex(log1X + 100,log1Y + 100);//1
+ // vertex(log1X + 200,log1Y + 100);//2
+ // vertex(log1X + 202,log1Y + 90);//3
+ // vertex(log1X + 207,log1Y + 90);//4
+ // vertex(log1X + 209,log1Y + 100);//5
+ // vertex(log1X + 250,log1Y + 100);//6
+ // vertex(log1X + 250,log1Y + 105);//7
+ // vertex(log1X + 240,log1Y + 110);//8
+ // vertex(log1X + 250,log1Y + 115);//9
+ // vertex(log1X + 240,log1Y + 120);//10
+ // vertex(log1X + 250,log1Y + 125);//11
+ // vertex(log1X + 250,log1Y + 150);
+ // vertex(log1X + 100,log1Y + 150);
+
+ //endShape(CLOSE);
