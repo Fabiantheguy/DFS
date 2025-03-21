@@ -107,5 +107,5 @@ void displayCollectedCans() {
   fill(255);
   textSize(20);
   textAlign(RIGHT, TOP);
-  text("Collected Cans: " + totalCansCollected, width - 20, 20);
+  //text("Collected Cans: " + totalCansCollected, width - 20, 20);
 }

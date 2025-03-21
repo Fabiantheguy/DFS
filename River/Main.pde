@@ -19,7 +19,6 @@ void draw() {
   canDraw();
   boatDraw();
   currencyDraw();
-  logDraw();
 }
 
 void mousePressed() {

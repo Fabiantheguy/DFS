@@ -236,10 +236,10 @@ void drawNet() {
   ellipse(netX, netY, netSize, netSize);
 
   // Draw the 4 slices of the net, darken based on cansInNet
-  for (int i = 0; i < 4; i++) {
+  for (int i = 0; i < netMax; i++) {
     // Calculate the angle for each slice
-    float startAngle = TWO_PI / 4 * i;
-    float endAngle = TWO_PI / 4 * (i + 1);
+    float startAngle = TWO_PI / netMax * i;
+    float endAngle = TWO_PI / netMax * (i + 1);
 
     // If this slice is filled, darken it
     if (i < cansInNet) {
@@ -253,8 +253,8 @@ void drawNet() {
   }
 
   // Draw the lines connecting the center to the corners
-  for (int i = 0; i < 4; i++) {
-    float angle = TWO_PI / 4 * i;
+  for (int i = 0; i < netMax; i++) {
+    float angle = TWO_PI / netMax * i;
     float x = netX + cos(angle) * netSize / 2;
     float y = netY + sin(angle) * netSize / 2;
     line(netX, netY, x, y);
