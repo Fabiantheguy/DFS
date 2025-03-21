@@ -7,7 +7,7 @@ PVector buttonSize; // width and length of button
 PFont buttonFont; // font of the text
 color buttonColor, fontColor; // colour of the button and the font
 
-int[] Upgrades = {5, 10, 20, 30}; // cost for net upgrades
+int[] Upgrades = {5, 10, 20, 25}; // cost for net upgrades
 
 
 boatUpgrade bu;
@@ -32,6 +32,7 @@ class boatUpgrade extends upgradesPurchased { //<>//
   void upgradeStats() {
     boatSpeed *= scale;
     Upgrades[0] *= scale;
+    totalCansCollected -= Upgrades[0];
   }
   
 }
@@ -41,6 +42,7 @@ class netRangeUpgrade extends upgradesPurchased {
   void upgradeStats() {
     maxRange *= scale;
     Upgrades[1] *= scale;     
+    totalCansCollected -= Upgrades[1];    
   }
 }
 
@@ -49,6 +51,7 @@ class netMaxUpgrade extends upgradesPurchased {
   void upgradeStats() {
     netMax *= scale;
     Upgrades[2] *= scale;
+    totalCansCollected -= Upgrades[2];    
   }
 }
 
@@ -57,15 +60,24 @@ class canUpgrade extends upgradesPurchased {
   void upgradeStats(){
     addValue += scale;
     Upgrades[3] *= scale;
+    totalCansCollected -= Upgrades[3];    
   }
   
 }
 
-//Singleton for money lossed after making a purchase of an upgrade
-
-
-// Command Pattern for Purchase History
-class purchaseHistory {
+// Command Pattern for instance of purchasing an upgradea
+class purchaseCommand {
+  
+  upgradesPurchased upgrade;
+  
+  purchaseCommand(upgradesPurchased upgrade) {
+    this.upgrade = upgrade; // assigning an object from the upgrade class to this upgrade field :3
+  }
+  
+  void execute() {
+    upgrade.upgradeStats(); // actually doing the purchase
+  }
+  
 }
 
 
@@ -103,30 +115,29 @@ void currencyDraw() {
     text(upgrades[i % 2], textPosX[i % 2] + 50, textPosY[i % 2]);
     text("Cost: " + Upgrades[i], textPosX[i % 2] + 50, textPosY[i] + 50);
     text("Cost: " + Upgrades[i % 2], textPosX[i % 2] + 50, textPosY[i % 2] + 50);
-    textSize(20);
-    text("Collected Cans: " + totalCansCollected, width - 125, 20);
   }
 }
+
 
 void currencyMousePressed() {
   
   // collisions for all the buttons 
   if (mouseX > 100 && mouseX < 415 && mouseY > 100 && mouseY < 240 && gamePaused == true && totalCansCollected >= Upgrades[0]) {
-    bu.upgradeStats(); //<>//
-    totalCansCollected -= Upgrades[0];
+    purchaseCommand purchase = new purchaseCommand(bu);
+    purchase.execute(); //<>//
   }
   
   if (mouseX > 1500 && mouseX < 1830 && mouseY > 100 && mouseY < 240 && gamePaused == true && totalCansCollected >= Upgrades[1]) {
-    nr.upgradeStats();
-    totalCansCollected -= Upgrades[1];
+    purchaseCommand purchase = new purchaseCommand(nr);
+    purchase.execute();
   }
   if (mouseX > 100 && mouseX < 415 && mouseY > 400 && mouseY < 530 && gamePaused == true && totalCansCollected >= Upgrades[2]) {
-    nm.upgradeStats();
-    totalCansCollected -= Upgrades[2];
+    purchaseCommand purchase = new purchaseCommand(nm);
+    purchase.execute();
   }
   
   if (mouseX > 1500 && mouseX < 1830 && mouseY > 400 && mouseY < 530 && gamePaused == true && totalCansCollected >= Upgrades[3]) {
-    cu.upgradeStats();
-    totalCansCollected -= Upgrades[3];
+    purchaseCommand purchase = new purchaseCommand(cu);
+    purchase.execute();
   }
 }

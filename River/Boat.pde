@@ -222,7 +222,6 @@ void collectCans() {
   for (int i = cansInNet - 1; i >= 0; i--) {
     Can can = cans.get(i);
     cansInNet = 0;  // Increment the number of cans in the net
-    totalCansCollected += addValue;  // Increment the total cans collected
   }
 }
 // Track the number of cans in the net
