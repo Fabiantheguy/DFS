@@ -16,8 +16,9 @@ void draw(){
   //noFill();
   
   //These Are The Logs And Rock To Avoid
+  //Log 1
     beginShape();
- //Log 1
+ 
   vertex(100, 100);//1
   vertex(200, 100);//2
   vertex(202, 90);//3
@@ -34,9 +35,9 @@ void draw(){
 
  endShape(CLOSE);
 
- 
+ //Log 2
   beginShape();
-  //log2
+
   fill(#E8943F);
   vertex(100, 200); //1
   vertex(200, 200); //2
@@ -52,9 +53,10 @@ void draw(){
   vertex(250, 250);
   vertex(100, 250);
   endShape(CLOSE);
-  
+ 
+  //Log 3
   beginShape();
-  //Log3
+ 
   fill(#3E1F00);
   vertex(100, 300); //1
   vertex(135, 300); //2
