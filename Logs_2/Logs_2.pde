@@ -36,7 +36,7 @@ void draw(){
 
  
   beginShape();
-  //log2
+  //Log2
   fill(#E8943F);
   vertex(100, 200); //1
   vertex(200, 200); //2
@@ -71,7 +71,7 @@ void draw(){
   vertex(100, 350);
   endShape(CLOSE);
   
- 
+  
   
 
   //These Are The Cans
@@ -83,7 +83,7 @@ void draw(){
   ellipse(168.0, 692, 35, 4);
   rect(150.5, 637, 35, 55);
   ellipse(168.0, 638, 35, 7);
-  endShape();
+  endShape(CLOSE);
   
   //RedCan
   beginShape();
@@ -103,25 +103,28 @@ void draw(){
   ellipse(270.0, 638, 35, 7);
   
   endShape();
+
+//This Is The Rock I Made
+  beginShape();
+  
+  fill(#2C2C2C);
+  vertex(270, 200); 
+  vertex(320, 150);
+  vertex(370, 130);
+  vertex(420, 160);
+  vertex(440, 220);
+  vertex(410, 260);
+  vertex(360, 240);
+  vertex(330, 230);
+  vertex(290, 210); 
+  
+  endShape(CLOSE);
+
+
 }
-
-
-
+//Log 1 That Moves
 
  // beginShape();
-  
- // fill(#FC0F0F);
- // vertex(400,400);
- // vertex(500,400);
- // vertex(480,420);
- // vertex(500,439);
- // vertex(480,460);
- // vertex(500,470);
- // vertex(400,470);
-  
- // endShape(CLOSE);
- //   beginShape();
- ////Log 1
  // vertex(log1X + 100,log1Y + 100);//1
  // vertex(log1X + 200,log1Y + 100);//2
  // vertex(log1X + 202,log1Y + 90);//3
