@@ -50,7 +50,7 @@ class Can implements CanObserver {
 // List to store the cans
 ArrayList<Can> cans = new ArrayList<Can>();
 int cansInNet = 0;  // Keep track of the number of cans in the net
-int totalCansCollected = 100;  // Total cans collected over time
+int totalCansCollected = 0;  // Total cans collected over time
 int addValue = 1; // adds to the total cans collected everytime a can is brought to the boat
 
 void constrainCanPosition(Can can) {
@@ -121,7 +121,7 @@ void displayCollectedCans() {
   fill(255);
   textSize(20);
   textAlign(RIGHT, TOP);
-  text("Collected Cans: " + totalCansCollected, width - 20, 20);
-  text("Collected Cans: " + cansInNet, width - 20, 100);
+  text("Total Cans: " + totalCansCollected, width - 20, 20);
+  text("Cans In Net: " + cansInNet, width - 20, 100);
 
 }
