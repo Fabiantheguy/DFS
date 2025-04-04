@@ -10,10 +10,10 @@ color buttonColor, fontColor; // colour of the button and the font
 int[] Upgrades = {5, 10, 20, 25}; // cost for net upgrades
 
 
-boatUpgrade bu;
-netRangeUpgrade nr;
-netMaxUpgrade nm;
-canUpgrade cu;
+boatUpgrade boatUpgrade;
+netRangeUpgrade netRange;
+netMaxUpgrade netMaximum;
+canUpgrade canValue;
 
 //Subclass Sandbox Pattern for Upgrades
 abstract class upgradesPurchased {
@@ -88,10 +88,10 @@ void currencySetup() {
   buttonSize = new PVector(320.0, 140.0); // all buttons are the same size
   buttonColor = #000000; // boring black
   fontColor = #FFFFFF; // boring white
-  bu = new boatUpgrade(); // increases the speed of the boat
-  nr = new netRangeUpgrade(); // increased the range the net is thrown
-  nm = new netMaxUpgrade(); // maximum net capicity upgrade
-  cu = new canUpgrade(); // Value of each can you collected
+  boatUpgrade = new boatUpgrade(); // increases the speed of the boat
+  netRange = new netRangeUpgrade(); // increased the range the net is thrown
+  netMaximum = new netMaxUpgrade(); // maximum net capicity upgrade
+  canValue = new canUpgrade(); // Value of each can you collected
 }
 
 void currencyDraw() {
@@ -123,21 +123,21 @@ void currencyMousePressed() {
   
   // collisions for all the buttons 
   if (mouseX > 100 && mouseX < 415 && mouseY > 100 && mouseY < 240 && gamePaused == true && totalCansCollected >= Upgrades[0]) {
-    purchaseCommand purchase = new purchaseCommand(bu);
+    purchaseCommand purchase = new purchaseCommand(boatUpgrade);
     purchase.execute(); //<>//
   }
   
   if (mouseX > 1500 && mouseX < 1830 && mouseY > 100 && mouseY < 240 && gamePaused == true && totalCansCollected >= Upgrades[1]) {
-    purchaseCommand purchase = new purchaseCommand(nr);
+    purchaseCommand purchase = new purchaseCommand(netRange);
     purchase.execute();
   }
   if (mouseX > 100 && mouseX < 415 && mouseY > 400 && mouseY < 530 && gamePaused == true && totalCansCollected >= Upgrades[2]) {
-    purchaseCommand purchase = new purchaseCommand(nm);
+    purchaseCommand purchase = new purchaseCommand(netMaximum);
     purchase.execute();
   }
   
   if (mouseX > 1500 && mouseX < 1830 && mouseY > 400 && mouseY < 530 && gamePaused == true && totalCansCollected >= Upgrades[3]) {
-    purchaseCommand purchase = new purchaseCommand(cu);
+    purchaseCommand purchase = new purchaseCommand(canValue);
     purchase.execute();
   }
 }
